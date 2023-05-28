@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <algorithm> // for std::sort
+#include <cstddef>
 
 namespace ariel{
 
@@ -11,7 +12,7 @@ class MagicalContainer {
 private:
     std::vector<int> elements;
 
-public:
+    public:
     MagicalContainer() = default; // Default constructor
     MagicalContainer(const MagicalContainer& other) = default; // Copy constructor
     ~MagicalContainer() = default; // Destructor
@@ -22,8 +23,6 @@ public:
     void removeElement(int element);
     int size() const;
 
-
-   public:
 
     class AscendingIterator {
         

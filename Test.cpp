@@ -1,7 +1,10 @@
 #include "doctest.h"
-#include "MagicalContainer.h"
+#include "MagicalContainer.hpp"
 #include <iostream>
 #include <vector>
+#include <algorithm> 
+
+using namespace ariel;
 
 
 TEST_CASE("Cheking addElement function"){
@@ -32,6 +35,7 @@ TEST_CASE("Checking getElements function") {
     CHECK(elements[4] == 3);
 }
 
+
 TEST_CASE("Checking setElements function") {
     MagicalContainer container;
     std::vector<int> elements = {5, 10, 15, 20};
@@ -49,9 +53,11 @@ TEST_CASE("Cheking removeElement function and size function"){
     container.addElement(9);
     container.addElement(3);
     CHECK_NOTHROW(container.removeElement(17));
+    CHECK_NOTHROW(container.removeElement(16));//remove nothing
     CHECK(container.size() == 4);
     CHECK_NOTHROW(container.removeElement(2));
     CHECK_NOTHROW(container.removeElement(25));
+    CHECK_NOTHROW(container.removeElement(6));//remove nothing
     CHECK_NOTHROW(container.removeElement(9));
     CHECK(container.size() == 1);
     CHECK_NOTHROW(container.removeElement(3));
@@ -68,7 +74,7 @@ TEST_CASE("Cheking AscendingIterator"){
     container.addElement(25);
     container.addElement(9);
     container.addElement(3);
-    AscendingIterator ascIter(container);
+    MagicalContainer::AscendingIterator ascIter(container);
     auto begin = ascIter.begin();
     CHECK(*begin == 2);
     ++begin;
@@ -79,11 +85,12 @@ TEST_CASE("Cheking AscendingIterator"){
     CHECK(*begin == 17);
     ++begin;
     CHECK(*begin == 25);
+    
 }
 
 TEST_CASE("Checking AscendingIterator with an empty container") {
     MagicalContainer container;
-    AscendingIterator ascIter(container);
+    MagicalContainer::AscendingIterator ascIter(container);
     auto begin_it = ascIter.begin();
     auto end_it = ascIter.end();
     CHECK(begin_it == end_it);
@@ -92,7 +99,7 @@ TEST_CASE("Checking AscendingIterator with an empty container") {
 TEST_CASE("AscendingIterator single element") {
     MagicalContainer container;
     container.addElement(5);
-    AscendingIterator ascIter(container);
+    MagicalContainer::AscendingIterator ascIter(container);
     auto temp = ascIter.begin();
     // Test the iterator with a single element in the container
     CHECK(*temp == 5);  // The iterator points to the only element
@@ -109,7 +116,7 @@ TEST_CASE("AscendingIterator duplicate elements") {
     container.addElement(5);
     container.addElement(3);
     container.addElement(7);
-    AscendingIterator ascIter(container);
+    MagicalContainer::AscendingIterator ascIter(container);
     auto temp = ascIter.begin();
     // Test the iterator with duplicate elements
     CHECK(*temp == 3);  // The iterator points to the smallest element
@@ -136,7 +143,7 @@ TEST_CASE("Cheking SideCrossIterator"){
     container.addElement(25);
     container.addElement(9);
     container.addElement(3);
-    SideCrossIterator crossIter(container);
+    MagicalContainer::SideCrossIterator crossIter(container);
     auto begin = crossIter.begin();
     CHECK(*begin == 2);
     ++begin;
@@ -151,7 +158,7 @@ TEST_CASE("Cheking SideCrossIterator"){
 
 TEST_CASE("Checking SideCrossIterator with an empty container") {
     MagicalContainer container;
-    SideCrossIterator crossIter(container);
+    MagicalContainer::SideCrossIterator crossIter(container);
     auto begin_it = crossIter.begin();
     auto end_it = crossIter.end();
     CHECK(begin_it == end_it);
@@ -161,7 +168,7 @@ TEST_CASE("Checking SideCrossIterator with an empty container") {
 TEST_CASE("SideCrossIterator single element") {
     MagicalContainer container;
     container.addElement(3);
-    SideCrossIterator crossIter(container);
+    MagicalContainer::SideCrossIterator crossIter(container);
     auto temp = crossIter.begin();
     // Test the iterator with a single element in the container
     CHECK(*temp == 3);  // The iterator points to the only element
@@ -180,7 +187,7 @@ TEST_CASE("SideCrossIterator duplicate elements") {
     container.addElement(3);
     container.addElement(7);
     //33577 -> 37375
-    SideCrossIterator crossIter(container);
+    MagicalContainer::SideCrossIterator crossIter(container);
     auto temp = crossIter.begin();
     // Test the iterator with duplicate elements
     CHECK(*temp == 3);  
@@ -204,7 +211,7 @@ TEST_CASE("SideCrossIterator reverse order") {
     container.addElement(7);
     container.addElement(5);
     container.addElement(3);
-    SideCrossIterator crossIter(container);
+    MagicalContainer::SideCrossIterator crossIter(container);
     auto temp = crossIter.begin();
     // Test the iterator with elements in reverse order
     CHECK(*temp == 3);  // The iterator points to the smallest element
@@ -226,7 +233,7 @@ TEST_CASE("SideCrossIterator odd number of elements") {
     container.addElement(5);
     container.addElement(10);
     //3 5 8 10 12 -> 3 12 5 10 8
-    SideCrossIterator crossIter(container);
+    MagicalContainer::SideCrossIterator crossIter(container);
     auto temp = crossIter.begin();
     // Test the iterator with an odd number of elements
     CHECK(*temp == 3);  // The iterator points to the smallest element
@@ -251,7 +258,7 @@ TEST_CASE("PrimeIterator with prime elements") {
     container.addElement(5);
     container.addElement(7);
     container.addElement(11);
-    PrimeIterator primeIter(container);
+    MagicalContainer::PrimeIterator primeIter(container);
     auto begin = primeIter.begin();
     CHECK(*begin == 2);  // The iterator points to the first prime element
     ++begin;
@@ -273,7 +280,7 @@ TEST_CASE("PrimeIterator without prime elements") {
     container.addElement(8);
     container.addElement(9);
     container.addElement(10);
-    PrimeIterator primeIter(container);
+    MagicalContainer::PrimeIterator primeIter(container);
     auto begin = primeIter.begin();
     auto end = primeIter.end();
     CHECK(begin == end);  // The iterator is already at the end since there are no prime elements
@@ -286,7 +293,7 @@ TEST_CASE("PrimeIterator with mixed elements") {
     container.addElement(7);
     container.addElement(8);
     container.addElement(11);
-    PrimeIterator primeIter(container);
+    MagicalContainer::PrimeIterator primeIter(container);
     auto begin = primeIter.begin();
     CHECK(*begin == 2);  // The iterator points to the first prime element
     ++begin;
@@ -300,7 +307,7 @@ TEST_CASE("PrimeIterator with mixed elements") {
 TEST_CASE("PrimeIterator single element") {
     MagicalContainer container;
     container.addElement(5);
-    PrimeIterator primeIter(container);
+    MagicalContainer::PrimeIterator primeIter(container);
     auto temp = primeIter.begin();
     // Test the iterator with a single prime element in the container
     CHECK(*temp == 5);  // The iterator points to the only prime element
@@ -316,7 +323,7 @@ TEST_CASE("PrimeIterator with large prime numbers") {
     container.addElement(7649);
     container.addElement(7829);
     container.addElement(7901);
-    PrimeIterator primeIter(container);
+    MagicalContainer::PrimeIterator primeIter(container);
     auto begin = primeIter.begin();
     CHECK(*begin == 3491);  // The iterator points to the first prime element (9999991)
     ++begin;
@@ -332,7 +339,7 @@ TEST_CASE("PrimeIterator with large prime numbers") {
 
 TEST_CASE("PrimeIterator empty container") {
     MagicalContainer container;
-    PrimeIterator primeIter(container);
+    MagicalContainer::PrimeIterator primeIter(container);
     auto begin_it = primeIter.begin();
     auto end_it = primeIter.end();
     CHECK(begin_it == end_it);  // The iterator is already at the end since the container is empty

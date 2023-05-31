@@ -21,7 +21,7 @@ std::vector<int>& MagicalContainer::getElements(){
     return this->elements;
 }
 
-void MagicalContainer::setElements(std::vector<int> elements){
+void MagicalContainer::setElements(std::vector<int>& elements){
     this->elements = elements;
 } 
 
